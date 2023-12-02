@@ -1,0 +1,46 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Request and Delivery</title>
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+</head>
+<body>
+    <div id="data-display">
+        <!-- Data will be displayed here -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        // Connect to the SocketIO server
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        function fetchData() {
+            // Emit a 'request_data' event to the server
+            socket.emit('request_data');
+        }
+
+        function displayData(data) {
+            const dataDisplay = document.getElementById('data-display');
+            dataDisplay.innerHTML = `
+            <h1>Name: ${data.systemname}</h1>
+            <p>share: ${data.cpu_share}%</p>
+            <p>tem: ${data.cpu_tem}&#8451</p>
+            `;
+        }
+
+        // Listen for the 'data_response' event from the server
+        socket.on('data_response', function (data) {
+            displayData(data);
+        });
+
+        // Fetch data at regular intervals (e.g., every 5 seconds)
+        setInterval(fetchData, 5000);
+    </script>
+</body>
+</html>

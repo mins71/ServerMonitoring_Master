@@ -8,9 +8,11 @@ login_ = Blueprint("main", __name__, url_prefix='/')
 @login_.route("/")
 def index():
     if 'userid' in session:
-        return f'Loggd in as {session["userid"]}. <a href="/logout">Logout</a><p></p><a href="/dashboard">gotodashboard</a>'
+        # return f'Loggd in as {session["userid"]}. <a href="/logout">Logout</a><p></p><a href="/dashboard">gotodashboard</a>'
+        return redirect(url_for("dashboard.index"))
     else:
-        return 'Not logged in. <a href=/login>Login</a>'
+        # return 'Not logged in. <a href=/login>Login</a>'
+        return redirect(url_for("main.login"))
 
 
 @login_.route("/login",methods=['GET','POST'])
@@ -23,9 +25,10 @@ def login():
         if row is not None:
             session['userid'] = row[0]
             session['username'] = row[1]
+            session['level'] = str(row[2])
             return redirect(url_for('main.index'))
         else:
-            return "Invalid id or pw!!!"
+            return "<h1>Invalid id or pw!!!</h1>"
     return render_template("home/login.html")
 
 

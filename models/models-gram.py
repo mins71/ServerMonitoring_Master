@@ -19,14 +19,14 @@ def SelectUser(id, pw):
         pwhash = bcrypt.hashpw(pw.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         '''
         cursor = connection.cursor()
-        sql = "SELECT userid,username,userpw,level From userlist WHERE userid=%s"
+        sql = "SELECT userid,username,userpw From userlist WHERE userid=%s"
         cursor.execute(sql, (id,))
         result = cursor.fetchone()
         if result is None:
             return None
         check_pw = result[2]        
         if bcrypt.checkpw(pw.encode('utf-8'), check_pw.encode('utf-8')):
-            row = (result[0], result[1], result[3])
+            row = (result[0], result[1])
             return row
         else:
             return None
@@ -40,8 +40,7 @@ passwd
 '''
 
 class DBconn:
-    def __init__(self):
-        self.db_info = db_info
+    def __init__(self, db_info):
         try:
             self.db_info = db_info
             self.connenction = db.connect(
@@ -55,16 +54,16 @@ class DBconn:
             
         except:
             raise Exception("DB Connection Error.")
-    
-    def commit(self):
-        self.connenction.commit()
-    
+        
     def close(self):
         self.connenction.close()
      
      
 class Auth(DBconn):
+    
     def Auth(self, connection, id, pw):
         cursor = connection.cursor()
         
+    def AddUser():
+        ...
         
